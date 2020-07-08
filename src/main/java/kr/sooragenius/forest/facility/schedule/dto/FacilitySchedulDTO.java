@@ -6,6 +6,7 @@ import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class FacilitySchedulDTO {
@@ -20,9 +21,7 @@ public class FacilitySchedulDTO {
         @NotNull
         private ScheduleType scheduleType;
         @NotNull @NotEmpty
-        private DateTime beginTime;
-        @NotNull @NotEmpty
-        private DateTime endTime;
+        private DateTime date;
         @Data
         public class DateTime {
             @NotNull
@@ -31,13 +30,9 @@ public class FacilitySchedulDTO {
             private Integer month;
             @NotNull
             private Integer day;
-            @NotNull
-            private Integer hour;
-            @NotNull
-            private Integer minute;
 
-            public LocalDateTime convertToLocalDateTime() {
-                return LocalDateTime.of(year, month, day, hour, minute);
+            public LocalDate convertToLocalDate() {
+                return LocalDate.of(year, month, day);
             }
         }
     }
@@ -47,15 +42,13 @@ public class FacilitySchedulDTO {
         private Long id;
         private String title;
         private String contents;
-        private LocalDateTime beginTime;
-        private LocalDateTime endTime;
+        private LocalDate date;
         public Response(FacilitySchedule facilitySchedule) {
             this.facilityId = facilitySchedule.getFacility().getId();
             this.id = facilitySchedule.getId();
             this.title = facilitySchedule.getTitle();
             this.contents = facilitySchedule.getContents();
-            this.beginTime = facilitySchedule.getBeginTime();
-            this.endTime = facilitySchedule.getEndTime();
+            this.date = facilitySchedule.getDate();
         }
     }
 }

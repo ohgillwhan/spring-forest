@@ -1,8 +1,9 @@
 package kr.sooragenius.forest.facility.enums;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-@AllArgsConstructor
+@AllArgsConstructor @Getter
 public enum Discount {
     FAMILY_OVER_4("4인가족이상"),
     CITIZEN("지역시민"),

@@ -14,6 +14,6 @@ public class FacilityController {
 
     @PostMapping(value = {"", "/"})
     public FacilityDTO.Response createFacility(@RequestBody FacilityDTO.Request request) {
-        return facilityService.createFacility(request);
+        return facilityService.saveFacility(request);
     }
 }

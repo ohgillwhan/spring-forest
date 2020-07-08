@@ -4,6 +4,7 @@ import kr.sooragenius.forest.common.RedirectUtil;
 import kr.sooragenius.forest.site.dto.SiteDTO;
 import kr.sooragenius.forest.site.service.SiteService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.Errors;
@@ -14,6 +15,7 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/site")
 @RequiredArgsConstructor
+@PreAuthorize("isAuthenticated()")
 public class SiteController {
     private final SiteService siteService;
     @GetMapping("/{siteId}")

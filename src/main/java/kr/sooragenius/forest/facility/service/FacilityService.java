@@ -17,7 +17,7 @@ public class FacilityService {
     private final FacilityRepository facilityRepository;
     private final SiteRepository siteRepository;
 
-    public FacilityDTO.Response createFacility(FacilityDTO.Request request) {
+    public FacilityDTO.Response saveFacility(FacilityDTO.Request request) {
         final Site site = siteRepository.findById(request.getSiteId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 Site입니다."));
 
         Facility facility = new Facility(request, site);
