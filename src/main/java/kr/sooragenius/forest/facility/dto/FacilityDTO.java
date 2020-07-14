@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
@@ -28,6 +29,10 @@ public class FacilityDTO {
         private String siteId;
         @NotNull @NotEmpty
         private String name;
+        @NotNull @Min(0)
+        private int normalAmount;
+        @NotNull @Min(0)
+        private int peakAmount;
         @NotNull
         private FacilityType facilityType;
         private Set<Discount> discounts;

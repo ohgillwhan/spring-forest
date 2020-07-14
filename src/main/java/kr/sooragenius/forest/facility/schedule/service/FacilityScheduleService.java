@@ -17,7 +17,7 @@ public class FacilityScheduleService {
     public FacilitySchedulDTO.Response saveFacilitySchedule(FacilitySchedulDTO.Request request) {
         Facility facility = facilityRepository.findById(request.getFacilityId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 시설입니다."));
 
-        FacilitySchedule facilitySchedule = new FacilitySchedule(request, facility);
+        FacilitySchedule facilitySchedule = FacilitySchedule.of(request, facility);
         facilityScheduleRepository.save(facilitySchedule);
 
         return new FacilitySchedulDTO.Response(facilitySchedule);

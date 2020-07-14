@@ -17,9 +17,13 @@ public class Site {
     private String id;
     private String name;
 
-    public Site(SiteDTO.Request request) {
-        this.id = request.getId();
-        this.name = request.getName();
+    public static Site of(SiteDTO.Request request) {
+        Site site = new Site();
+
+        site.id = request.getId();
+        site.name = request.getName();
+
+        return site;
     }
 
     public void update(SiteDTO.Request request) {

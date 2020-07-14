@@ -9,4 +9,10 @@ public class RedirectUtil {
 
         return "/common/redirectWithMessage";
     }
+
+    public static String backWithMessage(ModelMap modelMap, String message) {
+        modelMap.addAttribute("message", message);
+
+        return "/common/backWithMessage";
+    }
 }

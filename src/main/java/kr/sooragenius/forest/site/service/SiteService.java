@@ -19,7 +19,7 @@ public class SiteService {
         if(siteRepository.existsById(request.getId())) {
             throw new IllegalArgumentException("이미 존재하는 사이트입니다.");
         }
-        Site site = new Site(request);
+        Site site = Site.of(request);
 
         Site save = siteRepository.save(site);
 

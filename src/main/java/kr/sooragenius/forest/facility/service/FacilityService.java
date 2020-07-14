@@ -20,7 +20,7 @@ public class FacilityService {
     public FacilityDTO.Response saveFacility(FacilityDTO.Request request) {
         final Site site = siteRepository.findById(request.getSiteId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 Site입니다."));
 
-        Facility facility = new Facility(request, site);
+        Facility facility = Facility.of(request, site);
 
         facilityRepository.save(facility);
 
