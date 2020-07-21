@@ -14,10 +14,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Getter @NoArgsConstructor @AllArgsConstructor @Builder
@@ -79,5 +76,22 @@ public class Facility {
     }
     public boolean hasDiscount(Discount discount) {
         return discounts.contains(discount);
+    }
+
+    public Optional<Reservation> getWaitToCompleteReserveByCancelReserve(Reservation reservation) {
+        if(reservation.getStatus() != ReservationStatus.CANCEL) {
+            throw new RuntimeException("취소된 예약정보가 아닙니다");
+        }
+        Optional<Reservation> dupReserve = getReservations().stream()
+                .filter(item -> item != reservation)
+                .filter(item -> item.getStatus() == ReservationStatus.WAIT)
+                .filter(item ->
+                        item.getReservationDetails().stream()
+                                .filter(detail ->
+                                        detail.getFacilitySchedule().isBetween(reservation.getBeginDate(), reservation.getEndDate()))
+                                .count() <= reservation.getReservationDetails().size())
+                .findFirst();
+
+        return dupReserve;
     }
 }

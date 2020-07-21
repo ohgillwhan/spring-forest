@@ -27,6 +27,7 @@ public class ReservationDetail {
     private int totalAmount;
     private int discountAmount;
     private int feeAmount;
+    private int refundAmount;
 
     public static ReservationDetail of(Reservation reservation, FacilitySchedule facilitySchedule) {
         ReservationDetail reservationDetail = new ReservationDetail();
@@ -52,5 +53,19 @@ public class ReservationDetail {
         this.totalAmount = getFacilitySchedule().getReserveAmount();
         this.discountAmount = getTotalAmount() / 100 * getReservation().getDiscount().getPercent();
         this.feeAmount = getTotalAmount() - getDiscountAmount();
+    }
+
+    public int calcRefundAmount(long betweenCancelDateAndMinOfReserveDate) {
+        if(betweenCancelDateAndMinOfReserveDate == 1L) {
+            refundAmount = feeAmount / 100 * 40;
+        }else if(betweenCancelDateAndMinOfReserveDate <= 7L) {
+            refundAmount = feeAmount / 100 * 60;
+        }else if(betweenCancelDateAndMinOfReserveDate <= 14L) {
+            refundAmount = feeAmount / 100 * 80;
+        }else {
+            refundAmount = feeAmount;
+        }
+
+        return refundAmount;
     }
 }
