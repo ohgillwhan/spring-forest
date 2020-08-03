@@ -1,5 +1,6 @@
 package kr.sooragenius.forest.facility.reservation.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import kr.sooragenius.forest.facility.enums.Discount;
 import kr.sooragenius.forest.facility.reservation.detail.dto.ReservationDetailDTO;
 import kr.sooragenius.forest.facility.reservation.domain.Reservation;
@@ -19,7 +20,9 @@ public class ReservationDTO {
     public static class Request {
         private String memberId;
         private Long facilityId;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         private LocalDate beginDate;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         private LocalDate endDate;
         private Discount discount;
         private int numberOfPeople;

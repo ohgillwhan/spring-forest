@@ -5,6 +5,7 @@ import kr.sooragenius.forest.facility.reservation.domain.Reservation;
 import kr.sooragenius.forest.facility.schedule.domain.FacilitySchedule;
 import kr.sooragenius.forest.facility.schedule.enums.ScheduleType;
 import lombok.Getter;
+import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 import java.util.List;
@@ -17,10 +18,11 @@ public class ReservationDetail {
     @Column(name = "reservation_schedule_Id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reservation_id")
     private Reservation reservation;
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "schedule_id")
     private FacilitySchedule facilitySchedule;
 

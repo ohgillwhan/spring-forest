@@ -19,7 +19,7 @@ import java.util.Optional;
 @Entity
 @Getter
 public class Reservation {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reservation_id")
     private Long id;
 
@@ -49,21 +49,8 @@ public class Reservation {
     
     private int refundAmount;
 
-    public static Reservation reserve(ReservationDTO.Request request, Member member, Facility facility) {
+    public static Reservation reserveWithoutUpdateStatus(ReservationDTO.Request request, Member member, Facility facility) {
         List<FacilitySchedule> schedule = facility.getSchedulesBetweenDate(request.getBeginDate(), request.getEndDate());
-
-        if(schedule.isEmpty()) {
-            throw new RuntimeException("예약이 가능한 날짜가 없습니다.");
-        }else if(schedule.size() != request.getBetweenDays()) {
-            throw new RuntimeException("예약이 불가능한 날짜가 존재합니다.");
-        }else if(facility.hasNotDiscount(request.getDiscount())) {
-            throw new RuntimeException("예약이 불가능한 할인정책 입니다.");
-        }
-
-        long notReservableCount = schedule.stream().filter(FacilitySchedule::isNotReservable).count();
-        if(notReservableCount > 0L) {
-            throw new RuntimeException("예약이 불가능한 날짜가 존재합니다.");
-        }
 
         Reservation reservation = new Reservation();
 
@@ -73,11 +60,20 @@ public class Reservation {
         reservation.discount = request.getDiscount();
         reservation.reservationDetails = ReservationDetail.of(reservation, schedule);
         reservation.calcAmountByReservationDetails();
-        reservation.updateReserveStatus();
+
+        return reservation;
+    }
+    public static Reservation reserve(ReservationDTO.Request request, Member member, Facility facility) {
+        Reservation reservation = reserveWithoutUpdateStatus(request, member, facility);
+        reservation.updateReserveStatusWithToCalc();
+
 
         return reservation;
     }
     public Optional<Reservation> cancel(LocalDateTime cancelDateTime) {
+        if(getBeginDate().isAfter(cancelDateTime.toLocalDate())) {
+            throw new RuntimeException("이미 시설 이용중입니다.");
+        }
         ReservationStatus beforeStatus = getStatus();
         updateCancelStatus();
         calcRefundAmount(cancelDateTime);
@@ -105,7 +101,10 @@ public class Reservation {
         LocalDate min = getBeginDate();
         return ChronoUnit.DAYS.between(cancelDateTime.toLocalDate(), min);
     }
-    private void updateReserveStatus() {
+    public void updateReserveStatus(ReservationStatus status) {
+        this.status = status;
+    }
+    public void updateReserveStatusWithToCalc() {
         this.status = ReservationStatus.COMPLETE;
 
         for(ReservationDetail detail : getReservationDetails()) {

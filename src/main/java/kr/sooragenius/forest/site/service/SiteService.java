@@ -6,6 +6,9 @@ import kr.sooragenius.forest.site.infra.SiteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
+import org.springframework.transaction.support.TransactionSynchronizationUtils;
 
 import static kr.sooragenius.forest.site.dto.SiteDTO.*;
 
@@ -22,7 +25,6 @@ public class SiteService {
         Site site = Site.of(request);
 
         Site save = siteRepository.save(site);
-
         return Response.of(save);
     }
 

@@ -9,6 +9,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
+@Table(name = "member_info")
 public class Member {
     @Id
     @Column(name = "member_id")

@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -58,7 +59,7 @@ public class FacilitySchedule {
     }
 
     public boolean isReservable() {
-        if(isReservableStatus() && !hasCanNotReserveStatusByReservations()) {
+        if(isReservableStatus()) {
             return true;
         }
         return false;
@@ -83,16 +84,6 @@ public class FacilitySchedule {
         }
         return false;
     }
-
-    private boolean hasCanNotReserveStatusByReservations() {
-        for(ReservationDetail detail : getReservationDetails()) {
-            if(detail.getReservation().isNotReservableStatus()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public boolean hasCompleteStatusOfReservations(ReservationDetail ignoreDetail) {
         return hasStatusWithoutIgnoreDetail(ignoreDetail, ReservationStatus.COMPLETE);
     }
